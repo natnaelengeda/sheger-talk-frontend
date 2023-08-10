@@ -33,6 +33,8 @@ bot.start((ctx) => {
   ctx.session.messageCount = 0;
   ctx.session.messageCount++;
 
+
+
   console.log('Session Stage: ' + ctx.session.messageCount);
 
   console.log(ctx.message);
@@ -94,8 +96,6 @@ bot.hears('Lets Start 👇', (ctx) => {
       one_time_keyboard: true,
     }
   });
-
-
 
 });
 

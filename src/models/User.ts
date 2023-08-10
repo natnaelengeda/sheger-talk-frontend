@@ -24,19 +24,19 @@ User.init({
   },
   name: {
     type: new DataTypes.STRING(128),
-    allowNull: false,
+    allowNull: true,
   },
   age: {
     type: new DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
   gender: {
     type: new DataTypes.STRING(128),
-    allowNull: false,
+    allowNull: true,
   },
   city: {
     type: new DataTypes.STRING(128),
-    allowNull: false,
+    allowNull: true,
   },
   descritpion: {
     type: new DataTypes.STRING(200),
@@ -56,7 +56,7 @@ User.init({
   },
   image: {
     type: new DataTypes.STRING(128),
-    allowNull: false,
+    allowNull: true,
   }
 
 }, {
