@@ -5,6 +5,7 @@ dotenv.config();
 
 const app = express();
 
+const Bot = require('./controllers/Bot');
 const Index = require('./routes/Index');
 
 app.use(express.json());
