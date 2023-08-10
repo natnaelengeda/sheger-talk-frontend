@@ -1,9 +1,13 @@
 import { Request, Response } from 'express';
-
-export const Index = (req: Request, res: Response) => {
+import database from '../database/database';
+export const Index = async (req: Request, res: Response) => {
   try {
+    await database.authenticate();
+
+    await database.sync({ alter: true });
     res.status(200).json({
-      message: 'Sheger Talk Index Router'
+      message: 'Sheger Talk Index Router',
+      database: 'Database connected successfully'
     });
 
   } catch (error) {
