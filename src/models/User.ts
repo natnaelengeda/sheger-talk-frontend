@@ -3,13 +3,15 @@ import sequelize from '../database/database';
 
 class User extends Model {
   public id!: number;
+  public username!: string;
   public name!: string;
   public age!: number;
   public gender!: string;
   public city!: string;
   public descritpion!: string;
   public image!: string;
-
+  public chatId!: string;
+  public stage!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -38,7 +40,19 @@ User.init({
   },
   descritpion: {
     type: new DataTypes.STRING(200),
-    allowNull: false,
+    allowNull: true,
+  },
+  username: {
+    type: new DataTypes.STRING(128),
+    allowNull: true,
+  },
+  chatId: {
+    type: new DataTypes.STRING(128),
+    allowNull: true,
+  },
+  stage: {
+    type: new DataTypes.INTEGER,
+    allowNull: true,
   },
   image: {
     type: new DataTypes.STRING(128),
