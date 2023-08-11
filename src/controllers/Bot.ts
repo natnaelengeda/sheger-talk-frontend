@@ -2,6 +2,8 @@ import { Context, Telegraf, session } from "telegraf";
 import { message } from 'telegraf/filters';
 
 import dotenv from 'dotenv';
+import User from "../models/User";
+import { checkUser, updateStage } from "../utils/UsersFunctions";
 
 interface SessionData {
   messageCount: number;
@@ -28,21 +30,21 @@ var stage = 0;
 
 bot.use(session());
 
-bot.start((ctx) => {
+bot.start((ctx: any) => {
   ctx.session ??= { messageCount: 0 };
   ctx.session.messageCount = 0;
   ctx.session.messageCount++;
 
+  const chatId = ctx.chat.id;
+  const username = ctx.chat.username!;
 
-
-  console.log('Session Stage: ' + ctx.session.messageCount);
-
-  console.log(ctx.message);
+  checkUser(chatId, username);
+  console.log("Stage " + stage);
+  updateStage(chatId, stage);
 
   ctx.reply('Welcome to Sheger Talk Bot');
 
 
-  console.log(ctx.chat.id);
   bot.telegram.sendMessage(ctx.chat.id, 'Choose Your Language 👇', {
     reply_markup: {
       keyboard: [
@@ -55,14 +57,16 @@ bot.start((ctx) => {
     }
   });
 
-
 });
 
 bot.hears('🇺🇸 English', (ctx) => {
+  const chatId = ctx.chat.id;
+  updateStage(chatId, stage);
+
   ctx.session!.messageCount++;
   console.log('Session Stage: ' + ctx.session!.messageCount);
 
-  const letsStartString = 'Signup To Sheger Talk and talk to Habeshas form all over 🇪🇹 Ethiopia \n\n' +
+  const letsStartString = 'Start Sheger Talk and talk to Habeshas form all over 🇪🇹 Ethiopia \n\n' +
     'Get Your Friends Now 👇 \n\n' +
     '🇪🇷 Eritrea will be added soon \n'
 
@@ -80,7 +84,12 @@ bot.hears('🇺🇸 English', (ctx) => {
 });
 
 bot.hears('Lets Start 👇', (ctx) => {
+  const chatId = ctx.chat.id;
+
   ctx.session!.messageCount++;
+
+  updateStage(chatId, stage);
+
   console.log('Session Stage: ' + ctx.session!.messageCount);
 
   const confirmationString = '❗️ Remember that on the internet people can impersonate others \n\n\n The bot does not ask for personal data and does not identify users by any documents. \n\n Enjoy and Don\'t forget to have fun and share with your friends 👇 \n\n';
@@ -102,6 +111,9 @@ bot.hears('Lets Start 👇', (ctx) => {
 
 bot.hears('Continue ✌️', (ctx) => {
   ctx.session!.messageCount++;
+  const chatId = ctx.chat.id;
+
+  updateStage(chatId, stage);
   console.log('Session Stage: ' + ctx.session!.messageCount);
 
   const ageString = 'Your age?';
@@ -139,3 +151,5 @@ process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
 // Export the Bot
 module.exports = bot;
+
+

@@ -65,6 +65,5 @@ User.init({
   tableName: 'user',
 });
 
-User.sync({ alter: true });
 
 export default User;

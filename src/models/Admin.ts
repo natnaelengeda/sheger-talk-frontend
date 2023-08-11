@@ -47,6 +47,4 @@ Admin.init({
   tableName: 'admin',
 });
 
-Admin.sync({ alter: true });
-
 export default Admin;
