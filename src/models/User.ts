@@ -12,6 +12,8 @@ class User extends Model {
   public image!: string;
   public chatId!: string;
   public stage!: number;
+  public latitude!: Float32Array;
+  public longitude!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -52,6 +54,14 @@ User.init({
   },
   stage: {
     type: new DataTypes.INTEGER,
+    allowNull: true,
+  },
+  latitude: {
+    type: new DataTypes.FLOAT,
+    allowNull: true,
+  },
+  longitude: {
+    type: new DataTypes.FLOAT,
     allowNull: true,
   },
   image: {
