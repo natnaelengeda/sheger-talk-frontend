@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
 // Compnoents
 import { Input } from "@/components/ui/input"
@@ -16,9 +16,16 @@ import EmojiPicker,
 
 // Icons
 import { MdOutlineEmojiEmotions } from "react-icons/md";
+import CancelAlert from './components/CancelAlert';
 
-export default function BottomBar() {
+interface BottomBarProps {
+  pageState: string;
+  setPageState: Dispatch<SetStateAction<string>>
+}
+
+export default function BottomBar({ pageState, setPageState }: BottomBarProps) {
   const [emojiOpened, setEmojiOpened] = useState(false);
+  const [cancelOpened, setCancelOpened] = useState(false);
 
   const [message, setMessage] = useState("");
 
@@ -30,8 +37,16 @@ export default function BottomBar() {
     setMessage(e.target.value)
   }
 
+  const cancelChat = () => {
+    setPageState("start");
+    setCancelOpened(false);
+  }
+
   return (
     <div
+      style={{
+        display: pageState == "start" ? "none" : ""
+      }}
       className='relative w-full'>
       {/* Text Bar */}
       <div
@@ -55,8 +70,17 @@ export default function BottomBar() {
         </div>
         <div
           className=''>
-          <Button>
-            Send
+          <Button
+            onClick={() => {
+              if (message == "") {
+                setCancelOpened(true)
+              }
+            }}>
+            {
+              message == "" ?
+                "Cancel" :
+                "Send"
+            }
           </Button>
         </div>
       </div>
@@ -78,6 +102,11 @@ export default function BottomBar() {
           height={500}
           width={"90%"} />
       </div>
+
+      <CancelAlert
+        open={cancelOpened}
+        setCancelOpened={setCancelOpened}
+        cancelChat={cancelChat} />
     </div>
 
   )
