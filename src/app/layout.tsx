@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  // metadataBase: new URL('https://shegertalk.vercel.app/'),
+  metadataBase: new URL('https://shegertalk.vercel.app/'),
   icons: {
     icon: 'logo.png',
   },
