@@ -1,3 +1,4 @@
+import { generateRandomName } from "@/utils/randomNameGenerator";
 import
 React, {
   createContext,
@@ -6,6 +7,9 @@ React, {
   useState
 } from "react";
 import { io, Socket } from "socket.io-client";
+
+// Axios
+import axios from "@/utils/axios";
 
 const SocketContext = createContext<Socket | null>(null);
 
@@ -22,24 +26,29 @@ export function SocketProvider({
 }) {
   const [socket, setSocket] = useState<Socket | null>(null);
 
-  // useEffect(() => {
-  //   const newSocket = io(serverUrl);
+  useEffect(() => {
+    const newSocket = io(serverUrl);
+    const randomName = generateRandomName(6);
 
-  //   newSocket.on("connect", () => {
-  //     console.log("Connected to Socket.io");
-  //     console.log("Socket Id", newSocket.id);
-  //   });
+    newSocket.on("connect", () => {
+      console.log("Connected to Socket.io");
+      console.log("Socket Id", newSocket.id);
 
-  //   setSocket(newSocket);
+      axios.post("/user", {
+        name: randomName,
+        socket_id: newSocket.id
+      });
 
-  //   return () => {
-  //     newSocket.disconnect();
-  //     console.log("Disconnected From Socket.io");
-  //   };
+    });
 
-  // }, [serverUrl]);
+    setSocket(newSocket);
 
+    return () => {
+      newSocket.disconnect();
+      console.log("Disconnected From Socket.io");
+    };
 
+  }, [serverUrl]);
 
   return (
     <SocketContext.Provider

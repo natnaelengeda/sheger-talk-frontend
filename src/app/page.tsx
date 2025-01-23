@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Components
 import PageStart from "@/components/PageStart";
@@ -11,9 +11,13 @@ import BottomBar from "@/components/BottomBar";
 
 // Toast
 import { Toaster } from 'react-hot-toast';
+import { useSocket } from "@/context/SocketProvider";
+import OnlineCounter from "@/components/OnlineCounter";
 
 export default function Home() {
   const [pageState, setPageState] = useState("start");
+
+
 
   return (
     <div
@@ -25,6 +29,10 @@ export default function Home() {
           pageState == "messaging" ?
             <Messages /> : null
       }
+
+      <OnlineCounter
+        pageState={pageState} />
+
       <BottomBar
         pageState={pageState}
         setPageState={setPageState} />
