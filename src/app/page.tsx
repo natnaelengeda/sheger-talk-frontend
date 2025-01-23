@@ -13,11 +13,10 @@ import BottomBar from "@/components/BottomBar";
 import { Toaster } from 'react-hot-toast';
 import { useSocket } from "@/context/SocketProvider";
 import OnlineCounter from "@/components/OnlineCounter";
+import Notifications from "@/components/Notifications";
 
 export default function Home() {
   const [pageState, setPageState] = useState("start");
-
-
 
   return (
     <div
@@ -33,9 +32,12 @@ export default function Home() {
       <OnlineCounter
         pageState={pageState} />
 
+      <Notifications />
+
       <BottomBar
         pageState={pageState}
         setPageState={setPageState} />
+
       <Toaster />
     </div>
   );
