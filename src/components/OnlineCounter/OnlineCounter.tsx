@@ -26,7 +26,7 @@ export default function OnlineCounter({ pageState }: PageProps) {
     <div
       style={{
         display:
-          onlineUsersNo == 0 ? "none" :
+          onlineUsersNo <= 1 ? "none" :
             pageState == "messaging" ? "none" : ""
       }}
       className='absolute top-10 right-0 w-auto min-w-40 h-10  counter-class flex items-center justify-end pr-4'>
