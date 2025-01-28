@@ -35,12 +35,12 @@ export default function Home() {
 
   useEffect(() => {
     socket?.on("notification-all", (data) => {
-      console.log(data);
+      // console.log(data);
       sendWebPush(data);
     })
 
     socket?.on("notification-personal", (data) => {
-      console.log(data);
+      // console.log(data);
       sendWebPush(data);
     });
 

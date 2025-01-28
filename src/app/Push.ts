@@ -21,7 +21,7 @@ export async function registerAndSubscribe(
     await navigator.serviceWorker.register(SERVICE_WORKER_FILE_PATH);
     await subscribe(onSubscribe);
   } catch (error) {
-    console.log("Failed to register service-worker:", error);
+    console.error("Failed to register service-worker:", error);
   }
 }
 
@@ -34,7 +34,7 @@ async function subscribe(onSubscribe: (subs: PushSubscription | null) => void): 
       });
     })
     .then((subscription: PushSubscription) => {
-      console.info("Createrd subscription Object: ", subscription.toJSON());
+      // console.info("Createrd subscription Object: ", subscription.toJSON());
       // Submit Subscription to server.
       submitSubscription(subscription).then(_ => {
         onSubscribe(subscription);
@@ -55,7 +55,7 @@ async function submitSubscription(subscription: PushSubscription): Promise<void>
     body: JSON.stringify({ subscription }),
   });
   const result = await res.json();
-  console.log(result);
+  // console.log(result);
 };
 
 export function checkPermissionStateAndAct(
@@ -90,5 +90,5 @@ export async function sendWebPush(message: string | null): Promise<void> {
     body: JSON.stringify(pushBody),
   });
   const result = await res.json();
-  console.log(result);
+  // console.log(result);
 }
