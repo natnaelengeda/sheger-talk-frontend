@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+
+// Providers
 import Providers from "./provider";
+
+// CSS
+import "./globals.css";
+
 
 // Metadata
 import { meta } from "../data/metadata";

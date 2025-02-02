@@ -9,7 +9,7 @@ React, {
 import { io, Socket } from "socket.io-client";
 
 // Axios
-import axios from "@/utils/axios";
+// import axios from "@/utils/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login, UserState } from "@/state/user";
 
@@ -26,37 +26,67 @@ export function SocketProvider({
   children: React.ReactNode;
   serverUrl: string;
 }) {
+  const randomName = generateRandomName(6);
+
   const [socket, setSocket] = useState<Socket | null>(null);
   const user = useSelector((state: { user: UserState }) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const newSocket = io(serverUrl);
-    const randomName = generateRandomName(6);
+    const newSocket = io(serverUrl, {
+      query: {
+        userId: user.isLoggedIn ? user.userId : randomName,
+        isLoggedIn: user.isLoggedIn
+      }
+    });
 
     newSocket.on("connect", () => {
       console.log("Connected to Socket.io");
       console.log("Socket Id", newSocket.id);
-      console.log(user)
 
-      if (user.isLoggedIn == false) {
-        axios.post("/user", {
-          name: randomName,
-          socket_id: newSocket.id
-        }).then(() => {
-          axios.post("/online/add-user", {
-            userId: randomName,
-            socketId: newSocket.id
-          });
-        });
+      dispatch(login({
+        userId: user.isLoggedIn ? user.userId : randomName,
+        socketId: newSocket.id || "",
+        isLoggedIn: user.isLoggedIn
+      }));
 
-        dispatch(login({
-          userId: randomName,
-          socketId: " ",
-          isLoggedIn: true
-        }))
-      }
+      // if (user.isLoggedIn == true) {
+      //   axios.post("/user", {
+      //     name: user.userId,
+      //     socket_id: newSocket.id,
+      //     isLoggedIn: user.isLoggedIn
+      //   });
 
+      //   axios.post("/online/add-user", {
+      //     userId: user.userId,
+      //     socketId: newSocket.id
+      //   });
+
+      //   dispatch(login({
+      //     userId: user.userId,
+      //     socketId: newSocket.id || "",
+      //     isLoggedIn: true
+      //   }));
+
+      // } else {
+      //   axios.post("/user", {
+      //     name: randomName,
+      //     socket_id: newSocket.id,
+      //     isLoggedIn: user.isLoggedIn
+      //   });
+
+      //   axios.post("/online/add-user", {
+      //     userId: randomName,
+      //     socketId: newSocket.id
+      //   });
+
+      //   dispatch(login({
+      //     userId: randomName,
+      //     socketId: newSocket.id || "",
+      //     isLoggedIn: true
+      //   }));
+
+      // }
 
     });
 
@@ -65,7 +95,6 @@ export function SocketProvider({
     return () => {
       newSocket.disconnect();
       console.log("Disconnected From Socket.io");
-      axios.patch(`/online/delete-user/${newSocket.id}`)
     };
 
   }, [serverUrl]);

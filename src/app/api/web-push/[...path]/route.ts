@@ -12,6 +12,19 @@ webpush.setVapidDetails(
 let subscription: webpush.PushSubscription;
 
 export async function POST(request: Request) {
+  async function sendPush(request: Request) {
+    if (!subscription) {
+      return new Response(JSON.stringify({ error: "No subscription found." }), { status: 400 });
+    }
+
+    console.log(subscription, 'subs');
+    const body = await request.json();
+    const pushPayload = JSON.stringify(body);
+    await webpush.sendNotification(subscription, pushPayload);
+    return new Response(JSON.stringify({ message: "Push sent." }));
+  }
+
+
   const { pathname } = new URL(request.url);
   switch (pathname) {
     case '/api/web-push/subscription':
@@ -29,13 +42,6 @@ async function setSubscription(request: Request) {
   return new Response(JSON.stringify({ message: "Subscription set." }), {});
 }
 
-export async function sendPush(request: Request) {
-  console.log(subscription, 'subs');
-  const body = await request.json();
-  const pushPayload = JSON.stringify(body);
-  await webpush.sendNotification(subscription, pushPayload);
-  return new Response(JSON.stringify({ message: "Push sent." }));
-}
 
 async function noFoundApi() {
   return new Response(JSON.stringify({ error: "Invalid endpoint" }), {

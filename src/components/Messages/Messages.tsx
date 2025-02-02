@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react'
 
 // Components
-import MessageOut from './components/MessageOut';
+// import MessageOut from './components/MessageOut';
 import MessageIn from './components/MessageIn';
 
 // Styles

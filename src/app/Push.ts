@@ -1,6 +1,6 @@
 const SERVICE_WORKER_FILE_PATH = "./sw.js";
 const vapid_public_key = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || '';
-const vapid_private_key = process.env.NEXT_PUBLIC_VAPID_PRIVATE_KEY || "";
+// const vapid_private_key = process.env.NEXT_PUBLIC_VAPID_PRIVATE_KEY || "";
 
 export function notificationUnsupported(): boolean {
   let unsupported = false;
@@ -36,7 +36,7 @@ async function subscribe(onSubscribe: (subs: PushSubscription | null) => void): 
     .then((subscription: PushSubscription) => {
       // console.info("Createrd subscription Object: ", subscription.toJSON());
       // Submit Subscription to server.
-      submitSubscription(subscription).then(_ => {
+      submitSubscription(subscription).then(() => {
         onSubscribe(subscription);
       });
     })
@@ -55,7 +55,7 @@ async function submitSubscription(subscription: PushSubscription): Promise<void>
     body: JSON.stringify({ subscription }),
   });
   const result = await res.json();
-  // console.log(result);
+  console.log(result);
 };
 
 export function checkPermissionStateAndAct(
@@ -90,5 +90,5 @@ export async function sendWebPush(message: string | null): Promise<void> {
     body: JSON.stringify(pushBody),
   });
   const result = await res.json();
-  // console.log(result);
+  console.log(result);
 }
