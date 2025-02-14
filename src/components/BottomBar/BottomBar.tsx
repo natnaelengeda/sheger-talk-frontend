@@ -36,7 +36,7 @@ import toast from 'react-hot-toast';
 interface BottomBarProps {
   pageState: string;
   setPageState: Dispatch<SetStateAction<string>>;
-  setCurrentMessage: Dispatch<any>;
+  setCurrentMessage: Dispatch<SetStateAction<string>>;
   setMessageList: Dispatch<SetStateAction<IMessageData[] | []>>;
 }
 
@@ -63,7 +63,7 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
   }
 
   const sendMessage = () => {
-    if (message == " ") {
+    if (message == "") {
       toast("Enter Message to Send");
     } else {
       const date = new Date();
@@ -80,12 +80,16 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
       socket?.emit("send_message", JSON.stringify(messageData));
 
       // Set Current Message List
-      setMessageList((list: any) => [...list, messageData]);
-      setCurrentMessage("");
+      setMessageList((list: IMessageData[]) => {
+        if (list.some((msg: IMessageData) => msg.id === messageData.id)) {
+          return list;
+        } else {
+          return [...list, messageData];
+        }
+      });
 
-      // Clear Message After Sending
+      setCurrentMessage("");
       setMessage("");
-      // }
     }
   }
 

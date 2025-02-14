@@ -16,8 +16,13 @@ import { UserState } from '@/state/user';
 // Interface 
 import { IMessageData } from '@/interface/Message';
 
+// Toast
+import AppToast from '@/core/AppToast';
+
 // Styles
 import "./styles/styles.css";
+
+
 
 interface IMessagesPage {
   messageList: IMessageData[],
@@ -30,25 +35,21 @@ export default function Messages({ messageList, setMessageList }: IMessagesPage)
 
   // Handle Recieve Messages
   useEffect(() => {
-    socket?.on("receive_message", (data: any) => {
+    socket?.on("receive_message", (data) => {
       const inData: IMessageData = JSON.parse(data);
 
-      console.log(inData);
-      console.log(messageList);
-      if (messageList.length == 0) {
-
-        console.log("Hello")
-        setMessageList((list: any) => {
-          console.log(list);
+      setMessageList((list: IMessageData[]) => {
+        if (list.some((msg: IMessageData) => msg.id === inData.id)) {
+          return list;
+        } else {
           return [...list, inData];
-        });
-      }
+        }
+      });
     });
   }, [socket]);
 
-  // Greetings Message
   useEffect(() => {
-    // AppToast.welcomeNotify();
+    AppToast.welcomeNotify();
   }, []);
 
   return (

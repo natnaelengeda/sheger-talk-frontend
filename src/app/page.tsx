@@ -9,7 +9,7 @@ import {
 
 // Components
 import PageStart from "@/components/PageStart";
-import Messages from "@/components/Messages";
+import Messages from "@/components/Messages/Messages";
 
 // Bottom Bar
 import BottomBar from "@/components/BottomBar";
@@ -29,6 +29,8 @@ import {
 // Toast
 import toast, { Toaster } from 'react-hot-toast';
 import ConnectionRequest from "@/components/ConnectionRequest";
+
+// Interface
 import { IMessageData } from "@/interface/Message";
 
 export default function Home() {
@@ -52,6 +54,7 @@ export default function Home() {
 
   // Use Effects
   useEffect(() => {
+    console.log(unsupported, subscription);
     const isUnsupported = notificationUnsupported();
     setUnsupported(isUnsupported);
 
