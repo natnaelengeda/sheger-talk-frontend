@@ -97,7 +97,7 @@ export function SocketProvider({
       console.log("Disconnected From Socket.io");
     };
 
-  }, [serverUrl]);
+  }, []);
 
   return (
     <SocketContext.Provider

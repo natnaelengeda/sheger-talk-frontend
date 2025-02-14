@@ -23,30 +23,40 @@ import Notifications from "@/components/Notifications";
 import {
   checkPermissionStateAndAct,
   notificationUnsupported,
-  // registerAndSubscribe,
-  sendWebPush
+  sendWebPush,
 } from "./Push";
 
 // Toast
 import toast, { Toaster } from 'react-hot-toast';
+import ConnectionRequest from "@/components/ConnectionRequest";
+import { IMessageData } from "@/interface/Message";
 
 export default function Home() {
+
+  // States
   const [pageState, setPageState] = useState<string>("start");
+  // const [pageState, setPageState] = useState<string>("messagings");
   const [unsupported, setUnsupported] = useState<boolean>(false);
   const [subscription, setSubscription] = useState<PushSubscription | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
+  // const [message, setMessage] = useState<string | null>(null);
+
+  // Socket
   const socket = useSocket();
 
-  if (false) {
-    console.log(unsupported, subscription, message)
-    setMessage("");
-  }
+  // Messages
+  const [currentMessage, setCurrentMessage] = useState<string>("");
+  const [messageList, setMessageList] = useState<Array<IMessageData> | []>([]);
 
+  // Connection Request
+  // const [seconds, setSeconds] = useState<number>(10);
+
+  // Use Effects
   useEffect(() => {
     const isUnsupported = notificationUnsupported();
     setUnsupported(isUnsupported);
 
     if (isUnsupported) {
+      console.log(currentMessage)
       return;
     }
     checkPermissionStateAndAct(setSubscription);
@@ -65,50 +75,46 @@ export default function Home() {
 
   }, [socket]);
 
-
   // Recieve
   useEffect(() => {
     socket?.on("request-connection-client", (data) => {
       const socketMessage = JSON.parse(data);
-      const sender_id = socketMessage.sender_id;
-      console.log(sender_id)
+      const sender_id = socketMessage.sender_socket_id;
 
-      toast.custom((t: { visible: string, id: string }) => (
-        <div
-          className={`${t.visible ? 'animate-enter' : 'animate-leave'
-            } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
-          <div className="flex-1 w-0 p-4">
-            <div className="flex items-start">
-              <div className="flex-shrink-0 pt-0.5">
-                <img
-                  className="h-10 w-10 rounded-full"
-                  src="https://avatar.iran.liara.run/public"
-                  alt="Random Avatar"
-                />
-              </div>
-              <div className="ml-3 flex-1">
-                <p className="text-sm font-medium text-gray-900">
-                  Someone Wants to Talk with you...
-                </p>
-                <p className="mt-1 text-sm text-gray-500">
-                  Accept before 10 Seconds
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex border-l border-gray-200">
-            <button
-              onClick={() => toast.dismiss(t.id)}
-              className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              Accept
-            </button>
-          </div>
-        </div>
-      ));
-
-      console.log(data);
+      toast.custom((t: { visible: boolean, id: string }) => (
+        <ConnectionRequest
+          visible={t.visible}
+          id={t.id}
+          sender_id={sender_id} />
+      ), {
+        duration: 10000,
+      });
     })
   }, [socket]);
+
+  // Start Chat
+  useEffect(() => {
+    socket?.on("start-chat", (data) => {
+      const dataJSON = JSON.parse(data);
+      const room = dataJSON.room_id;
+
+      console.log(room);
+      socket?.emit("join-room", room);
+    });
+
+    socket?.on("joined-room", (data) => {
+      const dataJSON = JSON.parse(data);
+      const room = dataJSON.room_id;
+
+      localStorage.setItem("room", room);
+      setPageState("messaging");
+    });
+
+  }, [socket]);
+
+  // useEffect(() => {
+  //   socket?.emit("join-room", "123");
+  // }, []);
 
   return (
     <div
@@ -145,10 +151,12 @@ export default function Home() {
 
       {
         pageState == "start" ?
-          <PageStart
-            setPageState={setPageState} /> :
+          <PageStart /> :
           pageState == "messaging" ?
-            <Messages /> : null
+            <Messages
+              messageList={messageList}
+              setMessageList={setMessageList}
+            /> : null
       }
 
       <OnlineCounter
@@ -158,7 +166,9 @@ export default function Home() {
 
       <BottomBar
         pageState={pageState}
-        setPageState={setPageState} />
+        setPageState={setPageState}
+        setCurrentMessage={setCurrentMessage}
+        setMessageList={setMessageList} />
 
       <Toaster />
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { Dispatch, SetStateAction, useState } from 'react'
-import Image from 'next/image'
+import React, { useState } from 'react';
+import Image from 'next/image';
 
 // Components
 import { Button } from '../ui/button';
@@ -25,26 +25,21 @@ import toast from 'react-hot-toast';
 // AppAsset
 import AppAsset from '@/core/AppAsset';
 
-interface PageProps {
-  setPageState: Dispatch<SetStateAction<string>>
-}
-export default function PageStart({ setPageState }: PageProps) {
+export default function PageStart() {
   const user = useSelector((state: { user: UserState }) => state.user);
   const socket = useSocket();
 
-  if (false) {
-    setPageState("");
-  }
-
   const [loading, setloading] = useState(false);
-  setloading(false);
+
   const searchFunction = () => {
+    setloading(true);
     axios.get(`/online/${user.socketId}`)
       .then((response) => {
         const status = response.status;
         if (status == 200) {
           const random_socket_id = response.data;
 
+          setloading(false);
           socket?.emit(
             "request-connection",
             JSON.stringify({
@@ -55,8 +50,8 @@ export default function PageStart({ setPageState }: PageProps) {
       }).catch((error) => {
         console.error(error);
         toast.error("Unable to Find Someone for you");
-
       });
+
     // setloading(!loading);
     // setTimeout(() => {
     // false && setPageState("messaging");
