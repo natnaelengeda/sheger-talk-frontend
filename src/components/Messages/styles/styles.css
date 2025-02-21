@@ -1,0 +1,8 @@
+.text-container {
+  word-wrap: break-word;
+  /* Allow words to break onto the next line */
+  white-space: normal;
+  /* Ensures text can wrap */
+  overflow-wrap: break-word;
+  /* Fallback for older browsers */
+}
