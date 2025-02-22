@@ -1,12 +1,18 @@
 "use client";
-
-import { useSocket } from '@/context/SocketProvider';
 import React, { useEffect } from 'react'
+import Image from 'next/image';
+
+// Socket
+import { useSocket } from '@/context/SocketProvider';
+
+// Utils
+import { getRandomNumber16 } from '@/utils/randomNumberGenerator1-6';
 
 import toast from 'react-hot-toast';
 
 export default function Notifications() {
   const socket = useSocket();
+  const randomImage = getRandomNumber16();
 
   useEffect(() => {
     socket?.on("recieve-notification", () => {
@@ -17,9 +23,9 @@ export default function Notifications() {
           <div className="flex-1 w-0 p-4">
             <div className="flex items-start">
               <div className="flex-shrink-0 pt-0.5">
-                <img
+                <Image
                   className="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixqx=6GHAjsWpt9&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                  src={randomImage}
                   alt=""
                 />
               </div>

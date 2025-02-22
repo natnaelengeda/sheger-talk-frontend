@@ -52,17 +52,7 @@ export default function PageStart() {
         toast.error("Unable to Find Someone for you");
       });
 
-    // setloading(!loading);
-    // setTimeout(() => {
-    // false && setPageState("messaging");
-    // }, 2000);
-
-
   }
-
-  // const changePageState = () => {
-
-  // }
 
   return (
     <div

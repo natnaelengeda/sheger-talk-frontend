@@ -26,7 +26,7 @@ import { UserState } from '@/state/user';
 import { generateRandomId } from '@/utils/randomIdGenerator';
 
 // Interface
-import { IMessageData } from '@/interface/Message';
+import { IMessageData, ITypingData } from '@/interface/Message';
 
 // Icons
 import { MdOutlineEmojiEmotions } from "react-icons/md";
@@ -55,6 +55,7 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
 
   const changeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value)
+    handleTyping();
   }
 
   const cancelChat = () => {
@@ -67,10 +68,11 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
       toast("Enter Message to Send");
     } else {
       const date = new Date();
+      const room = localStorage.getItem("room");
 
       const messageData: IMessageData = {
         id: generateRandomId(25),
-        room: "123",
+        room: room || "",
         message: message,
         socket_id: user.socketId,
         time: date.toISOString(),
@@ -78,6 +80,9 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
 
       // Send Message
       socket?.emit("send_message", JSON.stringify(messageData));
+
+      // Close Emoji Tab
+      setEmojiOpened(false);
 
       // Set Current Message List
       setMessageList((list: IMessageData[]) => {
@@ -93,6 +98,35 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
     }
   }
 
+  // Send Message on Enter
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  }
+
+  // Typing Indicator
+  const handleTyping = () => {
+    const room = localStorage.getItem("room");
+
+    const typingData: ITypingData = {
+      id: generateRandomId(25),
+      room: room || "",
+      socket_id: user.socketId,
+      isTyping: true,
+    };
+
+    const typingDataEnd: ITypingData = {
+      id: generateRandomId(25),
+      room: room || "",
+      socket_id: user.socketId,
+      isTyping: false,
+    }
+
+    socket?.emit("client_typing", JSON.stringify(typingData));
+
+    setTimeout(() => socket?.emit("client_typing", JSON.stringify(typingDataEnd)), 1000); // Stop after 2s
+  };
 
   return (
     <div
@@ -111,7 +145,8 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
             className='border border-gray-300 outline-none focus:outline-none pr-10'
             placeholder='Enter message...'
             value={message}
-            onChange={changeText} />
+            onChange={changeText}
+            onKeyDown={handleKeyDown} />
           <div
             className='h-full absolute top-0 right-0 flex flex-col items-center justify-center pr-3'>
             <MdOutlineEmojiEmotions

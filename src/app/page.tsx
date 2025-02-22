@@ -26,6 +26,10 @@ import {
   sendWebPush,
 } from "./Push";
 
+// Redux
+import { useSelector } from "react-redux";
+import { UserState } from "@/state/user";
+
 // Toast
 import toast, { Toaster } from 'react-hot-toast';
 import ConnectionRequest from "@/components/ConnectionRequest";
@@ -34,6 +38,7 @@ import ConnectionRequest from "@/components/ConnectionRequest";
 import { IMessageData } from "@/interface/Message";
 
 export default function Home() {
+  const user = useSelector((state: { user: UserState }) => state.user);
 
   // States
   const [pageState, setPageState] = useState<string>("start");
@@ -99,10 +104,14 @@ export default function Home() {
   useEffect(() => {
     socket?.on("start-chat", (data) => {
       const dataJSON = JSON.parse(data);
-      const room = dataJSON.room_id;
-
-      console.log(room);
-      socket?.emit("join-room", room);
+      const body = {
+        userId: user.userId,
+        room: dataJSON.room_id,
+        socketId: user.socketId
+      }
+      console.log(body);
+      
+      socket?.emit("join-room", JSON.stringify(body));
     });
 
     socket?.on("joined-room", (data) => {
@@ -114,10 +123,6 @@ export default function Home() {
     });
 
   }, [socket]);
-
-  // useEffect(() => {
-  //   socket?.emit("join-room", "123");
-  // }, []);
 
   return (
     <div
