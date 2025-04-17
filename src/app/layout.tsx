@@ -6,7 +6,6 @@ import Providers from "./provider";
 // CSS
 import "./globals.css";
 
-
 // Metadata
 import { meta } from "../data/metadata";
 

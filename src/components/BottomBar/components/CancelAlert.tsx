@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react'
 
+// Shadcn
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,14 +13,18 @@ import {
   // AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+// Components
+import LoadingSpinner from '@/components/LoadingSpinner';
+
 
 interface AlertProps {
   open: boolean;
   setCancelOpened: Dispatch<SetStateAction<boolean>>;
   cancelChat: () => void;
+  cancelLoading: boolean;
 }
 
-export default function CancelAlert({ open, setCancelOpened, cancelChat }: AlertProps) {
+export default function CancelAlert({ open, setCancelOpened, cancelChat, cancelLoading }: AlertProps) {
   return (
     <AlertDialog
       open={open}>
@@ -37,8 +42,16 @@ export default function CancelAlert({ open, setCancelOpened, cancelChat }: Alert
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={cancelChat}>
-            Disconnect
+            onClick={cancelChat}
+            disabled={cancelLoading}
+            className='flex flex-row items-center justify-center gap-2'>
+            {
+              cancelLoading && <LoadingSpinner />
+            }
+            {
+              cancelLoading ? "Disconnecting..." : "Disconnect"
+            }
+
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

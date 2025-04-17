@@ -32,6 +32,8 @@ import { IMessageData, ITypingData } from '@/interface/Message';
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 
 import toast from 'react-hot-toast';
+import LoadingSpinner from '../LoadingSpinner';
+import AppToast from '@/core/AppToast';
 
 interface BottomBarProps {
   pageState: string;
@@ -47,6 +49,8 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
   const [emojiOpened, setEmojiOpened] = useState(false);
   const [cancelOpened, setCancelOpened] = useState(false);
 
+  const [cancelLoading, setCancelLoading] = useState<boolean>(false);
+
   const [message, setMessage] = useState("");
 
   const emojiClicked = (emojiData: EmojiClickData) => {
@@ -59,8 +63,31 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
   }
 
   const cancelChat = () => {
-    setPageState("start");
-    setCancelOpened(false);
+    try {
+      // setCancelLoading(true);
+      const room = localStorage.getItem("room");
+
+      const data = {
+        userId: user.userId,
+        room: room,
+        socketId: user.socketId,
+      }
+
+      socket?.emit("leave-room", JSON.stringify(data));
+
+      AppToast.chatEnded();
+
+      // Reset Page
+      setPageState("start");
+      setCurrentMessage("");
+      setMessageList([]);
+      setCancelOpened(false);
+      setCancelLoading(false);
+
+      localStorage.setItem("room", "");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const sendMessage = () => {
@@ -156,10 +183,18 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
         </div>
         <div
           className=''>
-          <Button
-            onClick={sendMessage}>
-            Send
-          </Button>
+          {
+            message == "" ?
+              <Button
+                onClick={() => setCancelOpened(true)}>
+                Cancel
+              </Button> :
+              <Button
+                onClick={sendMessage}>
+                Send
+              </Button>
+
+          }
         </div>
       </div>
       {/* Emoji Picker */}
@@ -184,7 +219,8 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
       <CancelAlert
         open={cancelOpened}
         setCancelOpened={setCancelOpened}
-        cancelChat={cancelChat} />
+        cancelChat={cancelChat}
+        cancelLoading={cancelLoading} />
     </div>
 
   )
