@@ -13,9 +13,19 @@ import { analytics, firebase } from "@/utils/firebase";
 export default function Providers({ children }: { children: React.ReactNode }) {
   const url = process.env.NEXT_PUBLIC_API_URL || "";
 
+
+  // Initialize Firebase
+  const InitializeFirebase = () => {
+    try {
+      firebase;
+      analytics;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
-    firebase;
-    analytics;
+    InitializeFirebase();
   }, []);
 
   return (

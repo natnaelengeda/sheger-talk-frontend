@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Image from 'next/image';
 
 // Redux
 import { useSelector } from 'react-redux';
@@ -10,14 +11,20 @@ import { useSocket } from '@/context/SocketProvider';
 // Toast
 import toast from 'react-hot-toast';
 
+// Utils
+import { getRandomNumber16 } from '@/utils/randomNumberGenerator1-6';
+
 interface IConnectionRequest {
   visible: boolean;
   id: string;
   sender_id: string;
 }
+
 export default function ConnectionRequest({ visible, id, sender_id }: IConnectionRequest) {
   const user = useSelector((state: { user: UserState }) => state.user);
   const socket = useSocket();
+
+  const randomImage = getRandomNumber16();
 
   const AcceptFunction = () => {
     toast.dismiss(id);
@@ -29,11 +36,6 @@ export default function ConnectionRequest({ visible, id, sender_id }: IConnectio
       }),
     );
 
-    // socket?.emit("join-room", "123");
-
-    // socket?.on("joined-room", () => {
-    //   console.log("Room Joined");
-    // })
   }
 
   return (
@@ -44,9 +46,9 @@ export default function ConnectionRequest({ visible, id, sender_id }: IConnectio
           className="flex-1 w-0 p-4">
           <div className="flex items-start">
             <div className="flex-shrink-0 pt-0.5">
-              <img
+              <Image
                 className="h-10 w-10 rounded-full"
-                src="https://avatar.iran.liara.run/public"
+                src={randomImage}
                 alt="Random Avatar"
               />
             </div>

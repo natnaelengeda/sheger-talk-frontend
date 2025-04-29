@@ -39,7 +39,6 @@ export default function PageStart() {
         if (status == 200) {
           const random_socket_id = response.data;
 
-          setloading(false);
           socket?.emit(
             "request-connection",
             JSON.stringify({
@@ -48,31 +47,23 @@ export default function PageStart() {
             }));
         }
       }).catch((error) => {
-        console.error(error);
+        // console.error(error);
         toast.error("Unable to Find Someone for you");
-      });
-
-    // setloading(!loading);
-    // setTimeout(() => {
-    // false && setPageState("messaging");
-    // }, 2000);
-
+      }).finally(() => {
+        setloading(false);
+      })
 
   }
 
-  // const changePageState = () => {
-
-  // }
-
   return (
     <div
-      className='relative w-full h-full flex flex-col items-center justify-start pt-60 gap-10 water-heartbeat'>
+      className='relative w-full h-full flex flex-col items-center justify-start pt-40 gap-10 water-heartbeat'>
 
       {/* Sheger Talk Logo */}
       <div
         className='relative w-full h-full flex items-center justify-center'>
         <Image
-          className={`relative w-32 h-32 object-contain z-50 ${loading ? "heartbeat" : ""}`}
+          className={`relative w-32 h-32 rounded-2xl border border-gray-300 shadow-xl object-contain z-10 ${loading ? "heartbeat" : ""}`}
           src={AppAsset.logo}
           alt="Sheger Talk Logo" />
         <section
@@ -80,11 +71,19 @@ export default function PageStart() {
         </section>
       </div>
 
-      <p>Start Chatting With People Online</p>
+      <p
+        style={{
+          zIndex: 3,
+        }}
+        className='text-xl relative'>
+        Start Chatting With People Online
+      </p>
 
       <div className='pt-10'>
         <Button
-          onClick={searchFunction}>
+          className='w-40 h-12 text-lg'
+          onClick={searchFunction}
+          disabled={loading}>
           {
             loading ?
               "Looking..." :

@@ -5,6 +5,7 @@ export const meta: Metadata = {
   icons: {
     icon: 'logo.png',
   },
+  // themeColor: "#0F4C81",
   title: "Sheger Talk",
   description: "Sheger Talk - Chat with your favourite stranger",
   applicationName: 'Next.js',

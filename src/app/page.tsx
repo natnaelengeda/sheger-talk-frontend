@@ -26,14 +26,21 @@ import {
   sendWebPush,
 } from "./Push";
 
+// Redux
+import { useSelector } from "react-redux";
+import { UserState } from "@/state/user";
+
 // Toast
 import toast, { Toaster } from 'react-hot-toast';
 import ConnectionRequest from "@/components/ConnectionRequest";
 
 // Interface
 import { IMessageData } from "@/interface/Message";
-import { useSelector } from "react-redux";
-import { UserState } from "@/state/user";
+
+// App Toast
+import AppToast from "@/core/AppToast";
+import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
 
 export default function Home() {
   const user = useSelector((state: { user: UserState }) => state.user);
@@ -102,16 +109,34 @@ export default function Home() {
   useEffect(() => {
     socket?.on("start-chat", (data) => {
       const dataJSON = JSON.parse(data);
-      const room = dataJSON.room_id;
 
-      console.log(room);
-      socket?.emit("join-room", JSON.stringify(
-        {
+      let type = dataJSON.type;
+
+      if (type == "sender") {
+        let user1_id = dataJSON.user1_id;
+        let user2_id = dataJSON.user2_id;
+
+        const body = {
+          type: dataJSON.type,
           userId: user.userId,
-          room: room,
+          user1_id: user1_id,
+          user2_id: user2_id,
+          room: dataJSON.room_id,
           socketId: user.socketId
         }
-      ));
+
+        socket?.emit("join-room", JSON.stringify(body));
+      } else {
+        const body = {
+          type: dataJSON.type,
+          userId: user.userId,
+          room: dataJSON.room_id,
+          socketId: user.socketId
+        }
+
+        socket?.emit("join-room", JSON.stringify(body));
+      }
+
     });
 
     socket?.on("joined-room", (data) => {
@@ -122,16 +147,55 @@ export default function Home() {
       setPageState("messaging");
     });
 
+
+    socket?.on("left-room", (data) => {
+      const dataJSON = JSON.parse(data);
+      const room = localStorage.getItem("room");
+
+      if (room == dataJSON.room) {
+        AppToast.chatEndedUser();
+
+        setPageState("start");
+        setCurrentMessage("");
+        setMessageList([]);
+
+        const data = {
+          userId: user.userId,
+          room: room,
+          socketId: user.socketId,
+        };
+
+        socket?.emit("l-room", JSON.stringify(data));
+        localStorage.setItem("room", "");
+
+      }
+    })
+
+    socket?.on("user-left-chat", (room) => {
+      AppToast.UserDisconnected();
+
+      setPageState("start");
+      setCurrentMessage("");
+      setMessageList([]);
+
+      const sendData = {
+        userId: user.userId,
+        room: room,
+        socketId: user.socketId
+      };
+
+      socket?.emit("l-room", JSON.stringify(sendData));
+      localStorage.setItem("room", "");
+    })
+
   }, [socket]);
 
-  // useEffect(() => {
-  //   socket?.emit("join-room", "123");
-  // }, []);
-
   return (
-    <div
-      className="relative w-full h-full flex flex-col-reverse items-start justify-start font-Roboto pb-16 overflow-x-hidden">
-      {/* <button
+    <div className="relative flex flex-col items-start justify-start w-full h-full">
+      <Header />
+      <div
+        className="relative w-full h-full min-h-screen flex flex-col-reverse items-start justify-end font-Roboto pb-16 overflow-x-hidden">
+        {/* <button
         disabled={unsupported}
         onClick={() => registerAndSubscribe(setSubscription)}
         className="px-3 py-2 bg-primary text-white rounded-lg m-20">
@@ -161,28 +225,30 @@ export default function Home() {
         </>
       ) : null} */}
 
-      {
-        pageState == "start" ?
-          <PageStart /> :
-          pageState == "messaging" ?
-            <Messages
-              messageList={messageList}
-              setMessageList={setMessageList}
-            /> : null
-      }
+        {
+          pageState == "start" ?
+            <PageStart /> :
+            pageState == "messaging" ?
+              <Messages
+                messageList={messageList}
+                setMessageList={setMessageList}
+              /> : null
+        }
 
-      <OnlineCounter
-        pageState={pageState} />
+        {/* <OnlineCounter
+          pageState={pageState} /> */}
+        <Sidebar />
 
-      <Notifications />
+        <Notifications />
 
-      <BottomBar
-        pageState={pageState}
-        setPageState={setPageState}
-        setCurrentMessage={setCurrentMessage}
-        setMessageList={setMessageList} />
+        <BottomBar
+          pageState={pageState}
+          setPageState={setPageState}
+          setCurrentMessage={setCurrentMessage}
+          setMessageList={setMessageList} />
 
-      <Toaster />
+        <Toaster />
+      </div>
     </div>
   );
 }

@@ -29,10 +29,11 @@ export default function OnlineCounter({ pageState }: PageProps) {
           onlineUsersNo <= 1 ? "none" :
             pageState == "messaging" ? "none" : ""
       }}
-      className='absolute top-10 right-0 w-auto min-w-40 h-10  counter-class flex items-center justify-end pr-4'>
+      className='absolute top-24 right-0 w-auto min-w-40 h-10  counter-class flex items-center justify-end pr-4'>
 
       {/* Main Content */}
-      <div className='relative flex flex-row items-center justify-start gap-2 text-sm font-bold uppercase border border-gray-300 px-3 py-2 rounded-lg shadow '>
+      <div
+        className='relative flex flex-row items-center justify-start gap-2 text-sm font-bold uppercase border border-gray-300 px-3 py-2 rounded-lg shadow bg-white '>
         {/* Green Online Dot */}
         <div className='w-[25px] h-[25px]  relative flex items-center justify-center'>
           <div className='w-[15px] h-[15px] rounded-full bg-[#62bd19] relative z-50'>
