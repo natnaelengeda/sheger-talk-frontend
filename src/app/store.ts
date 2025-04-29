@@ -4,6 +4,7 @@ import { persistReducer, persistStore } from "redux-persist";
 
 // States
 import userReducer from "../state/user";
+import sidebarReducer from "../state/sidebar";
 
 const userPersistConfig = {
   key: "user",
@@ -14,7 +15,8 @@ const userPersistReducer = persistReducer(userPersistConfig, userReducer);
 
 export const store = configureStore({
   reducer: {
-    user: userPersistReducer
+    user: userPersistReducer,
+    sidebar: sidebarReducer,
   },
   middleware: (getDefaultMiddlware) =>
     getDefaultMiddlware({

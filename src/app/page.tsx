@@ -39,6 +39,8 @@ import { IMessageData } from "@/interface/Message";
 
 // App Toast
 import AppToast from "@/core/AppToast";
+import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
 
 export default function Home() {
   const user = useSelector((state: { user: UserState }) => state.user);
@@ -189,9 +191,11 @@ export default function Home() {
   }, [socket]);
 
   return (
-    <div
-      className="relative w-full h-full flex flex-col-reverse items-start justify-start font-Roboto pb-16 overflow-x-hidden">
-      {/* <button
+    <div className="relative flex flex-col items-start justify-start w-full h-full">
+      <Header />
+      <div
+        className="relative w-full h-full min-h-screen flex flex-col-reverse items-start justify-end font-Roboto pb-16 overflow-x-hidden">
+        {/* <button
         disabled={unsupported}
         onClick={() => registerAndSubscribe(setSubscription)}
         className="px-3 py-2 bg-primary text-white rounded-lg m-20">
@@ -221,28 +225,30 @@ export default function Home() {
         </>
       ) : null} */}
 
-      {
-        pageState == "start" ?
-          <PageStart /> :
-          pageState == "messaging" ?
-            <Messages
-              messageList={messageList}
-              setMessageList={setMessageList}
-            /> : null
-      }
+        {
+          pageState == "start" ?
+            <PageStart /> :
+            pageState == "messaging" ?
+              <Messages
+                messageList={messageList}
+                setMessageList={setMessageList}
+              /> : null
+        }
 
-      <OnlineCounter
-        pageState={pageState} />
+        {/* <OnlineCounter
+          pageState={pageState} /> */}
+        <Sidebar />
 
-      <Notifications />
+        <Notifications />
 
-      <BottomBar
-        pageState={pageState}
-        setPageState={setPageState}
-        setCurrentMessage={setCurrentMessage}
-        setMessageList={setMessageList} />
+        <BottomBar
+          pageState={pageState}
+          setPageState={setPageState}
+          setCurrentMessage={setCurrentMessage}
+          setMessageList={setMessageList} />
 
-      <Toaster />
+        <Toaster />
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 :root {
   --width: 150px;
   --height: 150px;
-  --ripple-color: black;
+  --ripple-color: hsl(var(--primary));
   --borderRadius: 50%;
 }
 
@@ -40,7 +40,7 @@
 
 .micro {
   position: absolute;
-  z-index: 10;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;

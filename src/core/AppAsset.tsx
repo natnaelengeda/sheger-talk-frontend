@@ -1,5 +1,5 @@
 // Logo
-import logo from "@/assets/images/logo/logo.png";
+import logo from "@/assets/images/logo/logo.svg";
 
 // Random Images
 import randomImage1 from "@/assets/images/people/r-i-1.png";
