@@ -191,64 +191,28 @@ export default function Home() {
   }, [socket]);
 
   return (
-    <div className="relative flex flex-col items-start justify-start w-full h-full">
+    <div className="w-full h-full relative flex flex-col items-start justify-start ">
       <Header />
-      <div
-        className="relative w-full h-full min-h-screen flex flex-col-reverse items-start justify-end font-Roboto pb-16 overflow-x-hidden">
-        {/* <button
-        disabled={unsupported}
-        onClick={() => registerAndSubscribe(setSubscription)}
-        className="px-3 py-2 bg-primary text-white rounded-lg m-20">
-        {unsupported
-          ? 'Notification Unsupported'
-          : subscription
-            ? 'Notification allowed'
-            : 'Allow notification'}
-      </button>
+      <Sidebar />
 
-      <code className="m-24">
-        {subscription
-          ? JSON.stringify(subscription?.toJSON(), undefined, 2)
-          : 'There is no subscription'}
-      </code>
+      {
+        pageState == "start" ?
+          <PageStart /> :
+          pageState == "messaging" ?
+            <Messages
+              messageList={messageList}
+              setMessageList={setMessageList}
+            /> : null
+      }
 
-      {subscription ? (
-        <>
-          <input
-            placeholder={'Type push message ...'}
-            value={message ?? ''}
-            onChange={e => setMessage(e.target.value)}
-          />
-          <button
-            className="px-3 py-2 bg-primary text-white rounded-lg m-20"
-            onClick={() => sendWebPush(message)}>Test Web Push</button>
-        </>
-      ) : null} */}
-
-        {
-          pageState == "start" ?
-            <PageStart /> :
-            pageState == "messaging" ?
-              <Messages
-                messageList={messageList}
-                setMessageList={setMessageList}
-              /> : null
-        }
-
-        {/* <OnlineCounter
-          pageState={pageState} /> */}
-        <Sidebar />
-
-        <Notifications />
-
-        <BottomBar
-          pageState={pageState}
-          setPageState={setPageState}
-          setCurrentMessage={setCurrentMessage}
-          setMessageList={setMessageList} />
-
-        <Toaster />
-      </div>
+      <Notifications />
+      <BottomBar
+        pageState={pageState}
+        setPageState={setPageState}
+        setCurrentMessage={setCurrentMessage}
+        setMessageList={setMessageList} />
+      <Toaster />
     </div>
   );
 }
+

@@ -1,0 +1,40 @@
+<div
+className="relative w-full h-full min-h-screen flex flex-col items-start justify-end font-Roboto overflow-x-hidden">
+{/* <button
+disabled={unsupported}
+onClick={() => registerAndSubscribe(setSubscription)}
+className="px-3 py-2 bg-primary text-white rounded-lg m-20">
+{unsupported
+  ? 'Notification Unsupported'
+  : subscription
+    ? 'Notification allowed'
+    : 'Allow notification'}
+</button>
+
+<code className="m-24">
+{subscription
+  ? JSON.stringify(subscription?.toJSON(), undefined, 2)
+  : 'There is no subscription'}
+</code>
+
+{subscription ? (
+<>
+  <input
+    placeholder={'Type push message ...'}
+    value={message ?? ''}
+    onChange={e => setMessage(e.target.value)}
+  />
+  <button
+    className="px-3 py-2 bg-primary text-white rounded-lg m-20"
+    onClick={() => sendWebPush(message)}>Test Web Push</button>
+</>
+) : null} */}
+
+
+
+{/* <OnlineCounter
+  pageState={pageState} /> */}
+
+
+
+</div>

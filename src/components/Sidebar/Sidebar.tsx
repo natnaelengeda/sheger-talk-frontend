@@ -11,12 +11,21 @@ import { setIsOpen, SidebarState } from '@/state/sidebar';
 
 // Icons
 import { HiOutlineXMark } from "react-icons/hi2";
+import Ads from './components/Ads';
 
 const Sidebar = () => {
   const sidebar = useSelector((state: { sidebar: SidebarState }) => state.sidebar);
   const dispatch = useDispatch();
 
   const [sidebarWidth, setSidebarWidth] = useState(16);
+  const [navStyle, setNavStyle] = useState<string>("");
+
+  const menuItems = [
+    { id: 0, name: "Profile", },
+    { id: 1, name: "Chat History", },
+    { id: 2, name: "Feedback" },
+    { id: 3, name: "Donate" },
+  ]
 
   // Effect to update sidebar width when isOpen state changes
   useEffect(() => {
@@ -29,14 +38,22 @@ const Sidebar = () => {
         sidebar.isOpen ? (sidebarElement as HTMLElement).offsetWidth : 0;
       setSidebarWidth(width);
     }
+
+    // Show Navbar Options
+    if (sidebar.isOpen) {
+      const timeout = setTimeout(() => {
+        setNavStyle(styles.navVisible);
+      }, 300); // match CSS duration
+      return () => clearTimeout(timeout);
+    } else {
+      setNavStyle("");
+    }
+
   }, [sidebar.isOpen]);
 
   return (
     <div
-      style={{
-        // display: sidebar.isOpen ? `flex` : `none`
-      }}
-      className={`${styles.container} flex ${sidebar.isOpen ? `${styles.containerIsOpen}` : `${styles.containerIsClosed}`}`}>
+      className={`${styles.container} flex h-full min-h-[100dvh] overflow-hidden ${sidebar.isOpen ? `${styles.containerIsOpen}` : `${styles.containerIsClosed}`} overflow-hidden`}>
       {/* Sidebar */}
       <div
         // Adjusted width based on isOpen state
@@ -44,14 +61,25 @@ const Sidebar = () => {
           display: sidebar.isOpen ? `flex` : `none`,
           // width: sidebar.isOpen ? '19rem' : '5rem'
         }}
-        className={`${styles.sidebar} 
-                    ${sidebar.isOpen ? styles.sidebarOpen : styles.sidebarClosed}`}      >
+        className={`${styles.sidebar} ${sidebar.isOpen ? styles.sidebarOpen : styles.sidebarClosed} flex flex-col items-start justify-start gap-3 ${styles.nav} ${navStyle} overflow-hidden`}>
         {/* Sidebar content */}
-        <ul className={styles.nav}>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
+        <ul
+          className={`w-full h-auto pt-24 px-2 flex flex-col items-start justify-start gap-2 pl-4 `}>
+          {
+            menuItems.map((menu, index) => {
+              return (
+                <li
+                  key={index}
+                  className='w-full h-12 border-2 border-primary/85 text-primary flex items-center justify-start shadow-md pl-4 rounded-lg'>
+                  <p className='text-base'>{menu.name}</p>
+                </li>
+              );
+            })
+          }
         </ul>
+
+        {/* Add Section */}
+        <Ads />
       </div>
 
       {/* Main content */}
