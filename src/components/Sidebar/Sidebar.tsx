@@ -12,6 +12,7 @@ import { setIsOpen, SidebarState } from '@/state/sidebar';
 // Icons
 import { HiOutlineXMark } from "react-icons/hi2";
 import Ads from './components/Ads';
+import NavBar from './components/NavBar';
 
 const Sidebar = () => {
   const sidebar = useSelector((state: { sidebar: SidebarState }) => state.sidebar);
@@ -19,13 +20,6 @@ const Sidebar = () => {
 
   const [sidebarWidth, setSidebarWidth] = useState(16);
   const [navStyle, setNavStyle] = useState<string>("");
-
-  const menuItems = [
-    { id: 0, name: "Profile", },
-    { id: 1, name: "Chat History", },
-    { id: 2, name: "Feedback" },
-    { id: 3, name: "Donate" },
-  ]
 
   // Effect to update sidebar width when isOpen state changes
   useEffect(() => {
@@ -63,25 +57,10 @@ const Sidebar = () => {
         }}
         className={`${styles.sidebar} ${sidebar.isOpen ? styles.sidebarOpen : styles.sidebarClosed} flex flex-col items-start justify-start gap-3 ${styles.nav} ${navStyle} overflow-hidden`}>
         {/* Sidebar content */}
-        <ul
-          className={`w-full h-auto pt-24 px-2 flex flex-col items-start justify-start gap-2 pl-4 `}>
-          {
-            menuItems.map((menu, index) => {
-              return (
-                <li
-                  key={index}
-                  className='w-full h-12 border-2 border-primary/85 text-primary flex items-center justify-start shadow-md pl-4 rounded-lg'>
-                  <p className='text-base'>{menu.name}</p>
-                </li>
-              );
-            })
-          }
-        </ul>
-
+        <NavBar />
         {/* Add Section */}
         <Ads />
       </div>
-
       {/* Main content */}
       <div
 
