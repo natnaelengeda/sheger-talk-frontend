@@ -67,10 +67,11 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
       toast("Enter Message to Send");
     } else {
       const date = new Date();
+      const room = localStorage.getItem("room");
 
       const messageData: IMessageData = {
         id: generateRandomId(25),
-        room: "123",
+        room: room ?? "",
         message: message,
         socket_id: user.socketId,
         time: date.toISOString(),

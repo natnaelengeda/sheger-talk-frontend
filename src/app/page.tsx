@@ -32,8 +32,11 @@ import ConnectionRequest from "@/components/ConnectionRequest";
 
 // Interface
 import { IMessageData } from "@/interface/Message";
+import { useSelector } from "react-redux";
+import { UserState } from "@/state/user";
 
 export default function Home() {
+  const user = useSelector((state: { user: UserState }) => state.user);
 
   // States
   const [pageState, setPageState] = useState<string>("start");
@@ -102,7 +105,13 @@ export default function Home() {
       const room = dataJSON.room_id;
 
       console.log(room);
-      socket?.emit("join-room", room);
+      socket?.emit("join-room", JSON.stringify(
+        {
+          userId: user.userId,
+          room: room,
+          socketId: user.socketId
+        }
+      ));
     });
 
     socket?.on("joined-room", (data) => {
