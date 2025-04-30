@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 // State
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +19,7 @@ import styles from "../Sidebar/styles/sidebar.module.css";
 export default function Header() {
   const dispatch = useDispatch();
   const sidebar = useSelector((state: { sidebar: SidebarState }) => state.sidebar);
-
+  const router = useRouter();
   return (
     <header
       style={{
@@ -32,6 +33,9 @@ export default function Header() {
 
         {/* Image */}
         <div
+          onClick={() => {
+            router.push("/");
+          }}
           className='w-16 h-auto p-1'>
           <Image
             src={AppAsset.logo}

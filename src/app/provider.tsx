@@ -10,9 +10,12 @@ import { persistor, store } from "./store";
 import { PersistGate } from 'redux-persist/integration/react';
 import { analytics, firebase } from "@/utils/firebase";
 
+// Components
+import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
+
 export default function Providers({ children }: { children: React.ReactNode }) {
   const url = process.env.NEXT_PUBLIC_API_URL || "";
-
 
   // Initialize Firebase
   const InitializeFirebase = () => {
@@ -36,7 +39,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         persistor={persistor}>
         <SocketProvider
           serverUrl={`${url}/user`}>
-          {children}
+          <div
+            className="w-full h-full flex flex-col items-start justify-start relative">
+            <Header />
+            <Sidebar />
+            {children}
+          </div>
         </SocketProvider>
       </PersistGate>
     </Provider>

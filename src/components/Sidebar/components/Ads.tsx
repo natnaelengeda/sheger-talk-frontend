@@ -10,10 +10,10 @@ import { AsyncImage } from 'loadable-image';
 import { Blur } from 'transitions-kit'
 
 export default function Ads() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<[]>([]);
 
-  const highlights = [ 
+  const highlights = [
     {
       name: "AI Writing Assistant",
       description: "Boost your productivity with intelligent content suggestions and grammar correction powered by AI.",

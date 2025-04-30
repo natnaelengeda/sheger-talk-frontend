@@ -4,12 +4,14 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 export interface UserState {
   userId: string;
   socketId: string;
+  theme: string;
   isLoggedIn: boolean;
 }
 
 export const initialState: UserState = {
   userId: "",
   socketId: "",
+  theme: "system",
   isLoggedIn: false,
 }
 
@@ -27,9 +29,12 @@ export const userSlice = createSlice({
       state.socketId = "";
       state.isLoggedIn = false;
     },
+    changeTheme: (state, action: PayloadAction<{ theme: string }>) => {
+      state.theme = action.payload.theme;
+    }
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, changeTheme } = userSlice.actions;
 export const selectUser = (state: { user: UserState }) => state.user;
 export default userSlice.reducer;

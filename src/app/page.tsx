@@ -191,9 +191,8 @@ export default function Home() {
   }, [socket]);
 
   return (
-    <div className="w-full h-full relative flex flex-col items-start justify-start ">
-      <Header />
-      <Sidebar />
+    <div className="w-full h-full relative flex flex-col items-start justify-start">
+      
 
       {
         pageState == "start" ?
