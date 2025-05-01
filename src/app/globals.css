@@ -8,6 +8,9 @@
   .boor {
     @apply border border-black
   }
+  .prime-color{
+    @apply bg-[#0F4C81]
+  }
 }
 
 * {

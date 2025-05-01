@@ -8,7 +8,12 @@ import { SocketProvider } from "@/context/SocketProvider";
 import { Provider } from 'react-redux';
 import { persistor, store } from "./store";
 import { PersistGate } from 'redux-persist/integration/react';
+
+// Firebase
 import { analytics, firebase } from "@/utils/firebase";
+
+// Progress Bar
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 // Components
 import Header from "@/components/Header";
@@ -31,21 +36,34 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     InitializeFirebase();
   }, []);
 
+
+
+  const App = () => {
+    return (
+      <SocketProvider
+        serverUrl={`${url}/user`}>
+        <div
+          className="w-full h-full flex flex-col items-start justify-start relative">
+          <Header />
+          <Sidebar />
+          {children}
+        </div>
+      </SocketProvider>
+    );
+  }
+
   return (
     <Provider
       store={store}>
       <PersistGate
         loading={null}
         persistor={persistor}>
-        <SocketProvider
-          serverUrl={`${url}/user`}>
-          <div
-            className="w-full h-full flex flex-col items-start justify-start relative">
-            <Header />
-            <Sidebar />
-            {children}
-          </div>
-        </SocketProvider>
+        <ProgressBar
+          height="4px"
+          color="#000000"
+          options={{ showSpinner: false }}
+          shallowRouting />
+        <App />
       </PersistGate>
     </Provider>
   );

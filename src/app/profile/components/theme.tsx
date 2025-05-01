@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 
 // State
 import { changeTheme, UserState } from '@/state/user';
@@ -15,7 +15,7 @@ export default function Theme() {
   return (
     <div className='w-full flex flex-col items-start justify-start gap-2 mb-2'>
       <div className='flex flex-col items-start justify-start gap-2 mb-4'>
-        <h1 className='text-primary font-semibold text-base'>Appearance</h1>
+        <h1 className='text-primary font-semibold text-base'>Change Theme</h1>
         <hr className='w-20 border border-primary' />
       </div>
 
