@@ -22,6 +22,7 @@ import AppToast from '@/core/AppToast';
 // Styles
 import "./styles/styles.css";
 
+
 interface IMessagesPage {
   messageList: IMessageData[],
   setMessageList: Dispatch<SetStateAction<IMessageData[] | []>>;
@@ -30,11 +31,11 @@ interface IMessagesPage {
 export default function Messages({ messageList, setMessageList }: IMessagesPage) {
   const socket = useSocket();
   const user = useSelector((state: { user: UserState }) => state.user);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  // const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [typing, setTyping] = useState<boolean>(false);
 
-  // Handle Recieve Messages
+  // // Handle Recieve Messages
   useEffect(() => {
     socket?.on("receive_message", (data) => {
       const inData: IMessageData = JSON.parse(data);
@@ -61,7 +62,6 @@ export default function Messages({ messageList, setMessageList }: IMessagesPage)
 
   // Listen for typing events
   useEffect(() => {
-
     socket?.on("reciever_typing", (message) => {
       const data: ITypingData = JSON.parse(message)
       if (data.socket_id != user.socketId) {
@@ -73,44 +73,52 @@ export default function Messages({ messageList, setMessageList }: IMessagesPage)
       socket?.off("reciever_typing");
     };
   }, [socket]);
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // Scroll to bottom whenever messages change
+  useEffect(() => {
+    scrollToBottom()
+  }, [messageList])
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
 
   return (
-    <div
-      className='w-full min-h-[800px] h-auto flex flex-col items-start justify-start gap-3 px-3 py-5 overflow-hidden'>
-      {
-        messageList.map((message: IMessageData) => {
-          if (user.socketId == message.socket_id) {
-            return (
-              <MessageOut
-                key={message.id}
-                id={message.id}
-                message={message.message}
-                time={message.time} />
-            );
-          } else {
-            return (
-              <MessageIn
-                key={message.id}
-                id={message.id}
-                message={message.message}
-                time={message.time} />
-            );
+    <div className="w-full flex flex-col h-screen bg-gray-100">
+      <div className='h-28'>
+      </div>
+      {/* Messages container - flex-grow to take available space */}
+      <div className="flex-grow overflow-y-auto p-4 flex flex-col-reverse">
+        <div className="flex flex-col">
+          {/* Scroll anchor at the beginning of the reversed list */}
+          <div ref={messagesEndRef} />
+
+          {/* Messages displayed in chronological order */}
+          {
+            messageList.map((message: IMessageData) => (
+              <div key={message.id} className={`max-w-[80%] mb-4 ${user.socketId == message.socket_id ? "ml-auto" : "mr-auto"}`}>
+                <div
+                  className={`p-3 rounded-lg ${user.socketId == message.socket_id
+                    ? "bg-blue-600 text-white rounded-br-none"
+                    : "bg-gray-200 text-gray-800 rounded-bl-none"
+                    }`}>
+                  {message.message}
+                </div>
+                <div className='w-full flex items-end justify-end px-2'>
+                  <p
+                    className='text-xs'>
+                    {new Date(message.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                  </p>
+                </div>
+              </div>
+            ))
           }
-        })}
-
-      {/* Typing Indicator */}
-      {
-        typing && (
-          <div
-            className="typing-indicator w-auto max-w-[90%] h-auto min-h-12 min-w-20 bg-black text-white px-2 py-2 rounded-sm flex flex-row items-center justify-center gap-1">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        )}
-
+        </div>
+      </div>
       <div ref={messagesEndRef} />
-    </div >
+      <div className='h-16'>
+      </div>
+    </div>
   )
 }

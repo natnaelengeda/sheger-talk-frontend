@@ -47,7 +47,7 @@ export default function Header() {
 
         {/* Menu */}
         {/* <Sidebar /> */}
-        <div>
+        <div className='hidden'>
           <button
             onClick={() => {
               dispatch(setIsOpen({ isOpen: true }))

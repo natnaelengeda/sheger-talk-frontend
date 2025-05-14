@@ -8,8 +8,9 @@
   .boor {
     @apply border border-black
   }
-  .prime-color{
-    @apply bg-[#0F4C81]
+
+  .prime-color {
+    @apply bg-blue-600
   }
 }
 
@@ -32,7 +33,7 @@
 
     --popover-foreground: 0 0% 3.9%;
 
-    --primary: 210 79% 28%;
+    --primary: 221 83% 58%;
 
     --primary-foreground: 0 0% 98%;
 
