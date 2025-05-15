@@ -7,7 +7,7 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    'x-api-key': process.env.NEXT_PUBLIC_API_URL,
+    'x-api-key': process.env.NEXT_PUBLIC_API_KEY,
   }
 });
 
