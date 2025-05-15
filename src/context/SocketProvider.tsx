@@ -46,47 +46,10 @@ export function SocketProvider({
       dispatch(login({
         userId: user.isLoggedIn ? user.userId : randomName,
         socketId: newSocket.id || "",
-        isLoggedIn: user.isLoggedIn
+        isLoggedIn: user.isLoggedIn,
+        language: "en",
+        theme: "light"
       }));
-
-      // if (user.isLoggedIn == true) {
-      //   axios.post("/user", {
-      //     name: user.userId,
-      //     socket_id: newSocket.id,
-      //     isLoggedIn: user.isLoggedIn
-      //   });
-
-      //   axios.post("/online/add-user", {
-      //     userId: user.userId,
-      //     socketId: newSocket.id
-      //   });
-
-      //   dispatch(login({
-      //     userId: user.userId,
-      //     socketId: newSocket.id || "",
-      //     isLoggedIn: true
-      //   }));
-
-      // } else {
-      //   axios.post("/user", {
-      //     name: randomName,
-      //     socket_id: newSocket.id,
-      //     isLoggedIn: user.isLoggedIn
-      //   });
-
-      //   axios.post("/online/add-user", {
-      //     userId: randomName,
-      //     socketId: newSocket.id
-      //   });
-
-      //   dispatch(login({
-      //     userId: randomName,
-      //     socketId: newSocket.id || "",
-      //     isLoggedIn: true
-      //   }));
-
-      // }
-
     });
 
     setSocket(newSocket);

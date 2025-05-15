@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const meta: Metadata = {
-  metadataBase: new URL('https://shegertalk.vercel.app/'),
+  metadataBase: new URL('https://sheger.talk.et'),
   icons: {
     icon: 'logo.png',
   },
