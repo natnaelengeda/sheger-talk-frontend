@@ -39,7 +39,7 @@ export default function PageStart() {
         const status = response.status;
 
         if (status == 200) {
-          const result = response.data;
+          // const result = response.data;
 
           const random_socket_id = response.data.id;
           setShowWaiting(true);
