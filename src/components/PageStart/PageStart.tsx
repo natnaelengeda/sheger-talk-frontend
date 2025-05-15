@@ -30,6 +30,7 @@ export default function PageStart() {
   const socket = useSocket();
 
   const [loading, setloading] = useState(false);
+  const [showWaiting, setShowWaiting] = useState(false);
 
   const searchFunction = () => {
     setloading(true);
@@ -38,7 +39,7 @@ export default function PageStart() {
         const status = response.status;
         if (status == 200) {
           const random_socket_id = response.data;
-
+          setShowWaiting(true);
           socket?.emit(
             "request-connection",
             JSON.stringify({
@@ -52,8 +53,18 @@ export default function PageStart() {
       }).finally(() => {
         setloading(false);
       })
-
   }
+
+  React.useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (showWaiting) {
+      timer = setTimeout(() => {
+        setShowWaiting(false);
+        toast.error("No response received. Please try again.");
+      }, 10000);
+    }
+    return () => clearTimeout(timer);
+  }, [showWaiting]);
 
   return (
     <div
@@ -79,7 +90,12 @@ export default function PageStart() {
         Start Chatting With People Online
       </p>
 
-      <div className='pt-10'>
+      {
+        showWaiting &&
+        <p>Waiting for them to Accept</p>
+      }
+
+      <div className={`${showWaiting ? "pt-1" : "pt-10"}`}>
         <Button
           className='w-40 h-12 text-lg'
           onClick={searchFunction}
