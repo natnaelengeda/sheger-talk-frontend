@@ -21,11 +21,11 @@ let analytics: any;
 isSupported().then((supported: any) => {
   if (supported) {
     analytics = getAnalytics(firebase);
-    process.env.NODE_ENV == "development" &&
-      console.log("Firebase Analytics initialized");
+    // process.env.NODE_ENV == "development" &&
+    //   console.log("Firebase Analytics initialized");
   } else {
-    process.env.NODE_ENV == "development" &&
-      console.log("Firebase Analytics not supported in this environment");
+    // process.env.NODE_ENV == "development" &&
+    //   console.log("Firebase Analytics not supported in this environment");
   }
 });
 

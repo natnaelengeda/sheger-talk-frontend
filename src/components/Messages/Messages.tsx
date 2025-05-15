@@ -1,10 +1,6 @@
 "use client";
 
-import React, { useEffect, Dispatch, SetStateAction, useRef, useState } from 'react';
-
-// Components
-import MessageIn from './components/MessageIn';
-import MessageOut from './components/MessageOut';
+import React, { useEffect, Dispatch, SetStateAction, useRef } from 'react';
 
 // Socket
 import { useSocket } from '@/context/SocketProvider';
@@ -33,7 +29,7 @@ export default function Messages({ messageList, setMessageList }: IMessagesPage)
   const user = useSelector((state: { user: UserState }) => state.user);
   // const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const [typing, setTyping] = useState<boolean>(false);
+  // const [typing, setTyping] = useState<boolean>(false);
 
   // // Handle Recieve Messages
   useEffect(() => {
@@ -65,7 +61,7 @@ export default function Messages({ messageList, setMessageList }: IMessagesPage)
     socket?.on("reciever_typing", (message) => {
       const data: ITypingData = JSON.parse(message)
       if (data.socket_id != user.socketId) {
-        setTyping(data.isTyping);
+        // setTyping(data.isTyping);
       }
     });
 

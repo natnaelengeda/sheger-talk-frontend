@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // Skeleton Loading
 import Skeleton from 'react-loading-skeleton';
@@ -13,6 +13,11 @@ export default function Ads() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [data, setData] = useState<[]>([]);
 
+
+  useEffect(() => {
+    setIsLoading(true);
+    setData([]);
+  }, []);
   const highlights = [
     {
       name: "AI Writing Assistant",

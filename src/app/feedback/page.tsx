@@ -8,9 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import axios from "@/utils/axios";
-import toast from 'react-hot-toast';
-
 type Inputs = {
   name: string;
   message: string;
@@ -20,7 +17,6 @@ export default function Page() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {

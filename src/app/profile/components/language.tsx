@@ -2,7 +2,7 @@
 import React from 'react';
 
 // State
-import { changeLanguage, changeTheme, UserState } from '@/state/user';
+import { changeLanguage, UserState } from '@/state/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { TiTick } from 'react-icons/ti';
 

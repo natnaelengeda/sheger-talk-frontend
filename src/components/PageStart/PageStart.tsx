@@ -46,7 +46,7 @@ export default function PageStart() {
               reciever_socket_id: random_socket_id
             }));
         }
-      }).catch((error) => {
+      }).catch(() => {
         // console.error(error);
         toast.error("Unable to Find Someone for you");
       }).finally(() => {

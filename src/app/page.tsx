@@ -18,7 +18,6 @@ import BottomBar from "@/components/BottomBar";
 import { useSocket } from "@/context/SocketProvider";
 
 // Components
-import OnlineCounter from "@/components/OnlineCounter";
 import Notifications from "@/components/Notifications";
 import {
   checkPermissionStateAndAct,
@@ -39,8 +38,8 @@ import { IMessageData } from "@/interface/Message";
 
 // App Toast
 import AppToast from "@/core/AppToast";
-import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
+// import Header from "@/components/Header";
+// import Sidebar from "@/components/Sidebar";
 
 export default function Home() {
   const user = useSelector((state: { user: UserState }) => state.user);
@@ -110,11 +109,11 @@ export default function Home() {
     socket?.on("start-chat", (data) => {
       const dataJSON = JSON.parse(data);
 
-      let type = dataJSON.type;
+      const type = dataJSON.type;
 
       if (type == "sender") {
-        let user1_id = dataJSON.user1_id;
-        let user2_id = dataJSON.user2_id;
+        const user1_id = dataJSON.user1_id;
+        const user2_id = dataJSON.user2_id;
 
         const body = {
           type: dataJSON.type,
@@ -192,7 +191,7 @@ export default function Home() {
 
   return (
     <div className="w-full h-full relative flex flex-col items-start justify-start">
-      
+
 
       {
         pageState == "start" ?

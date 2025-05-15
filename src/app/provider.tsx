@@ -25,8 +25,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   // Initialize Firebase
   const InitializeFirebase = () => {
     try {
-      firebase;
-      analytics;
+      console.log(firebase);
+      console.log(analytics);
     } catch (error) {
       console.error(error);
     }

@@ -32,7 +32,6 @@ import { IMessageData, ITypingData } from '@/interface/Message';
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 
 import toast from 'react-hot-toast';
-import LoadingSpinner from '../LoadingSpinner';
 import AppToast from '@/core/AppToast';
 
 interface BottomBarProps {

@@ -3,22 +3,17 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 // State
-import { useDispatch, useSelector } from 'react-redux';
-import { setIsOpen, SidebarState } from '@/state/sidebar';
+import { useDispatch } from 'react-redux';
+import { setIsOpen } from '@/state/sidebar';
 
 // AppAsset
 import AppAsset from '@/core/AppAsset';
 
 // Icons
 import { RiMenu3Fill } from "react-icons/ri";
-import Sidebar from '../Sidebar';
-
-// Styles
-import styles from "../Sidebar/styles/sidebar.module.css";
 
 export default function Header() {
   const dispatch = useDispatch();
-  const sidebar = useSelector((state: { sidebar: SidebarState }) => state.sidebar);
   const router = useRouter();
   return (
     <header
