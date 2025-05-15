@@ -37,8 +37,11 @@ export default function PageStart() {
     axios.get(`/online/${user.socketId}`)
       .then((response) => {
         const status = response.status;
+
         if (status == 200) {
-          const random_socket_id = response.data;
+          const result = response.data;
+
+          const random_socket_id = response.data.id;
           setShowWaiting(true);
           socket?.emit(
             "request-connection",
@@ -46,6 +49,8 @@ export default function PageStart() {
               sender_socket_id: user.socketId,
               reciever_socket_id: random_socket_id
             }));
+        } else if (status == 201) {
+          toast.error("Unable to Find Someone for you");
         }
       }).catch(() => {
         // console.error(error);
