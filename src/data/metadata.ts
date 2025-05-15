@@ -18,14 +18,14 @@ export const meta: Metadata = {
     'Talk Online',
 
   ],
-  creator: 'Natnael Engeda',
+  creator: 'Sheger Talk',
   authors: [
     {
-      name: 'Natnael Engeda',
+      name: 'Sheger Talk',
       url: 'https://natnaelengeda.tech'
     }
   ],
-  publisher: "Natnael Engeda",
+  publisher: "Sheger Talk",
   openGraph: {
     title: "Sheger Talk",
     description: "Sheger Talk - Chat with your favourite stranger",
