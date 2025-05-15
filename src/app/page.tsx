@@ -38,6 +38,7 @@ import { IMessageData } from "@/interface/Message";
 
 // App Toast
 import AppToast from "@/core/AppToast";
+import OnlineCounter from "@/components/OnlineCounter";
 // import Header from "@/components/Header";
 // import Sidebar from "@/components/Sidebar";
 
@@ -192,7 +193,6 @@ export default function Home() {
   return (
     <div className="w-full h-full relative flex flex-col items-start justify-start">
 
-
       {
         pageState == "start" ?
           <PageStart /> :
@@ -202,6 +202,9 @@ export default function Home() {
               setMessageList={setMessageList}
             /> : null
       }
+
+      <OnlineCounter
+        pageState={pageState} />
 
       <Notifications />
       <BottomBar
