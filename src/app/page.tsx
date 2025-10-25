@@ -30,8 +30,7 @@ import { useSelector } from "react-redux";
 import { UserState } from "@/state/user";
 
 // Toast
-import toast, { Toaster } from 'react-hot-toast';
-import ConnectionRequest from "@/components/ConnectionRequest";
+import { Toaster } from 'react-hot-toast';
 
 // Interface
 import { IMessageData } from "@/interface/Message";
@@ -39,8 +38,7 @@ import { IMessageData } from "@/interface/Message";
 // App Toast
 import AppToast from "@/core/AppToast";
 import OnlineCounter from "@/components/OnlineCounter";
-// import Header from "@/components/Header";
-// import Sidebar from "@/components/Sidebar";
+import ConnectionRequest from "@/components/connection-request";
 
 export default function Home() {
   const user = useSelector((state: { user: UserState }) => state.user);
@@ -51,6 +49,7 @@ export default function Home() {
   const [unsupported, setUnsupported] = useState<boolean>(false);
   const [subscription, setSubscription] = useState<PushSubscription | null>(null);
   // const [message, setMessage] = useState<string | null>(null);
+  const [connectionRequest, setConnectionRequest] = useState<string | null>(null);
 
   // Socket
   const socket = useSocket();
@@ -88,21 +87,30 @@ export default function Home() {
 
   }, [socket]);
 
-  // Recieve
+  // // Recieve
+  // useEffect(() => {
+  //   socket?.on("request-connection-client", (data) => {
+  //     const socketMessage = JSON.parse(data);
+  //     const sender_id = socketMessage.sender_socket_id;
+  //     <ConnectionRequestUser
+  //       sender_id={sender_id} />
+  //   })
+  // }, [socket]);
+
   useEffect(() => {
-    socket?.on("request-connection-client", (data) => {
+    if (!socket) return;
+
+    socket.on("request-connection-client", (data) => {
       const socketMessage = JSON.parse(data);
       const sender_id = socketMessage.sender_socket_id;
 
-      toast.custom((t: { visible: boolean, id: string }) => (
-        <ConnectionRequest
-          visible={t.visible}
-          id={t.id}
-          sender_id={sender_id} />
-      ), {
-        duration: 10000,
-      });
-    })
+      setConnectionRequest(sender_id);
+      setTimeout(() => setConnectionRequest(null), 12000);
+    });
+
+    return () => {
+      socket.off("request-connection-client");
+    };
   }, [socket]);
 
   // Start Chat
@@ -191,7 +199,10 @@ export default function Home() {
   }, [socket]);
 
   return (
-    <div className="w-full h-full relative flex flex-col items-start justify-start">
+    <div className="w-full h-full relative flex flex-col items-start justify-start overflow-hidden">
+      <ConnectionRequest
+        key={connectionRequest}
+        sender_id={connectionRequest ?? ""} />
 
       {
         pageState == "start" ?

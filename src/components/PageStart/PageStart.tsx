@@ -51,13 +51,12 @@ export default function PageStart() {
             }));
         } else if (status == 201) {
           toast.error("Unable to Find Someone for you");
+          setloading(false);
         }
       }).catch(() => {
-        // console.error(error);
         toast.error("Unable to Find Someone for you");
-      }).finally(() => {
         setloading(false);
-      })
+      });
   }
 
   React.useEffect(() => {
@@ -65,6 +64,7 @@ export default function PageStart() {
     if (showWaiting) {
       timer = setTimeout(() => {
         setShowWaiting(false);
+        setloading(false);
         toast.error("No response received. Please try again.");
       }, 10000);
     }

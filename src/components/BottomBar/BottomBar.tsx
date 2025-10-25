@@ -168,7 +168,7 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
         <div
           className='w-full relative'>
           <Input
-            className='border border-gray-300 outline-none focus:outline-none pr-10'
+            className='pr-10 !outline-none !focus:outline-none !focus:ring-2 !focus:ring-blue-400 !focus:ring-offset-0'
             placeholder='Enter message...'
             value={message}
             onChange={changeText}
