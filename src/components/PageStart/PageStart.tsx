@@ -39,16 +39,14 @@ export default function PageStart() {
         const status = response.status;
 
         if (status == 200) {
-          // const result = response.data;
-
           const random_socket_id = response.data.id;
           setShowWaiting(true);
           socket?.emit(
             "request-connection",
-            JSON.stringify({
+            {
               sender_socket_id: user.socketId,
               reciever_socket_id: random_socket_id
-            }));
+            });
         } else if (status == 201) {
           toast.error("Unable to Find Someone for you");
           setloading(false);
