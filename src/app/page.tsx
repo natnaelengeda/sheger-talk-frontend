@@ -101,8 +101,7 @@ export default function Home() {
     if (!socket) return;
 
     socket.on("request-connection-client", (data) => {
-      const socketMessage = JSON.parse(data);
-      const sender_id = socketMessage.sender_socket_id;
+      const sender_id = data.sender_socket_id;
 
       setConnectionRequest(sender_id);
       setTimeout(() => setConnectionRequest(null), 12000);
@@ -116,7 +115,7 @@ export default function Home() {
   // Start Chat
   useEffect(() => {
     socket?.on("start-chat", (data) => {
-      const dataJSON = JSON.parse(data);
+      const dataJSON = data;
 
       const type = dataJSON.type;
 
@@ -133,7 +132,7 @@ export default function Home() {
           socketId: user.socketId
         }
 
-        socket?.emit("join-room", JSON.stringify(body));
+        socket?.emit("join-room", body);
       } else {
         const body = {
           type: dataJSON.type,
@@ -142,13 +141,13 @@ export default function Home() {
           socketId: user.socketId
         }
 
-        socket?.emit("join-room", JSON.stringify(body));
+        socket?.emit("join-room", body);
       }
 
     });
 
     socket?.on("joined-room", (data) => {
-      const dataJSON = JSON.parse(data);
+      const dataJSON = data;
       const room = dataJSON.room_id;
 
       localStorage.setItem("room", room);
@@ -157,10 +156,9 @@ export default function Home() {
 
 
     socket?.on("left-room", (data) => {
-      const dataJSON = JSON.parse(data);
       const room = localStorage.getItem("room");
 
-      if (room == dataJSON.room) {
+      if (room == data.room) {
         AppToast.chatEndedUser();
 
         setPageState("start");
@@ -173,7 +171,7 @@ export default function Home() {
           socketId: user.socketId,
         };
 
-        socket?.emit("l-room", JSON.stringify(data));
+        socket?.emit("l-room", data);
         localStorage.setItem("room", "");
 
       }

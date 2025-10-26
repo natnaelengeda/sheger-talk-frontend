@@ -72,7 +72,7 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
         socketId: user.socketId,
       }
 
-      socket?.emit("leave-room", JSON.stringify(data));
+      socket?.emit("leave-room", data);
 
       AppToast.chatEnded();
 
@@ -105,7 +105,7 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
       };
 
       // Send Message
-      socket?.emit("send_message", JSON.stringify(messageData));
+      socket?.emit("send_message", messageData);
 
       // Close Emoji Tab
       setEmojiOpened(false);
@@ -149,9 +149,9 @@ export default function BottomBar({ pageState, setPageState, setCurrentMessage, 
       isTyping: false,
     }
 
-    socket?.emit("client_typing", JSON.stringify(typingData));
+    socket?.emit("client_typing", typingData);
 
-    setTimeout(() => socket?.emit("client_typing", JSON.stringify(typingDataEnd)), 1000); // Stop after 2s
+    setTimeout(() => socket?.emit("client_typing", typingDataEnd), 1000); // Stop after 2s
   };
 
   return (

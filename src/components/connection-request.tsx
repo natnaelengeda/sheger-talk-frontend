@@ -19,10 +19,10 @@ export default function ConnectionRequest({ sender_id, onComplete }: IConnection
   const AcceptFunction = () => {
 
     socket?.emit("accept-chat-request",
-      JSON.stringify({
+      {
         sender_socket_id: sender_id,
         reciever_socket_id: user.socketId
-      }),
+      },
     );
 
   }

@@ -34,7 +34,7 @@ export default function Messages({ messageList, setMessageList }: IMessagesPage)
   // // Handle Recieve Messages
   useEffect(() => {
     socket?.on("receive_message", (data) => {
-      const inData: IMessageData = JSON.parse(data);
+      const inData: IMessageData = data;
 
       setMessageList((list: IMessageData[]) => {
         if (list.some((msg: IMessageData) => msg.id === inData.id)) {
@@ -59,7 +59,7 @@ export default function Messages({ messageList, setMessageList }: IMessagesPage)
   // Listen for typing events
   useEffect(() => {
     socket?.on("reciever_typing", (message) => {
-      const data: ITypingData = JSON.parse(message)
+      const data: ITypingData = message;
       if (data.socket_id != user.socketId) {
         // setTyping(data.isTyping);
       }
